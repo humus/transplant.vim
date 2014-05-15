@@ -1,0 +1,24 @@
+Before:
+  let prefix='<SNR>' . TransplantVimId()
+  let DefineNewPath=function(prefix . 'define_new_path')
+After:
+  unlet DefineNewPath
+Given:
+  
+Execute:
+  let result = DefineNewPath('C:\home\r\project\directory',
+        \ 'C:\home\r\project\new_directory',
+        \ 'C:\home\r\project\directory\path\to\file\to_transplant.txt')
+  call setline(1, result)
+Expect:
+  C:\home\r\project\new_directory\path\to\file\to_transplant.txt
+
+Given:
+  
+Execute:
+  let result = DefineNewPath('C:\home\r\project\directory',
+        \ 'C:\home\r\project\new_directory\',
+        \ 'C:\home\r\project\directory\path\to\file\to_transplant.txt')
+  call setline(1, result)
+Expect:
+  C:\home\r\project\new_directory\path\to\file\to_transplant.txt
