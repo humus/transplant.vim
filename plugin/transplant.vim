@@ -21,9 +21,11 @@ fun! s:transplant_file(file) "{{{
     let l:destinations=s:define_destinations(l:selected_dir, l:base_dir)
     let l:destinations_text=map(copy(l:destinations), 's:format_destination(v:key+1, v:val)')
     let l:destination=s:select_destination(l:destinations_text, l:base_dir)
-    let l:new_path=s:define_new_path((l:selected_dir),
-          \ l:base_dir . s:path_sep . l:destination, a:file)
-    echo l:new_path
+    let l:new_path=fnameescape(s:define_new_path((l:selected_dir),
+          \ l:base_dir . s:path_sep . l:destination, a:file))
+    execute 'sav ' . l:new_path
+    call delete(expand('#'))
+    execute 'bw ' . fnameescape(a:file)
   catch /CANCELLED/
     echohl warningmsg | echo 'cancelled' | echohl none
   finally
