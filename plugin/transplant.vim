@@ -23,6 +23,8 @@ fun! s:transplant_file(file) "{{{
     let l:destination=s:select_destination(l:destinations_text, l:base_dir)
     let l:new_path=fnameescape(s:define_new_path((l:selected_dir),
           \ l:base_dir . s:path_sep . l:destination, a:file))
+    let l:new_path=simplify(l:new_path)
+    call s:ensuredir(l:new_path)
     execute 'sav ' . l:new_path
     call delete(expand('#'))
     execute 'bw ' . fnameescape(a:file)
@@ -31,6 +33,13 @@ fun! s:transplant_file(file) "{{{
   finally
     let &cmdheight=l:_cmd_height
   endtry
+endfunction "}}}
+
+fun! s:ensuredir( thefile ) "{{{
+    let l:thedir = fnamemodify(a:thefile, ':h')
+    if !isdirectory(l:thedir)
+        call mkdir(l:thedir, 'p')
+    endif
 endfunction "}}}
 
 fun! s:define_destinations(selected_dir, base_dir) "{{{
